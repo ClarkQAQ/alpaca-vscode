@@ -117,7 +117,7 @@ That's it — start typing in the editor to get completions, and click the spark
 ```bash
 bun install
 bun run bundle          # produces dist/extension.js
-bun run packge          # produces .vsix package
+bun run package          # produces .vsix package
 ```
 
 ## License
