@@ -1,0 +1,238 @@
+{
+	"name": "alpaca-vscode",
+	"displayName": "alpaca-vscode",
+	"description": "FIM code completion and git commit message generation with llama.cpp",
+	"version": "0.1.0",
+	"publisher": "clarkqaq",
+	"repository": {
+	"type": "git",
+	"url": "https://github.com/clarkqaq/alpaca-vscode"
+},
+	"engines": {
+		"vscode": "^1.109.0"
+	},
+	"activationEvents": [
+		"onLanguage:plaintext",
+		"onLanguage:javascript",
+		"onLanguage:typescript",
+		"onCommand.acceptFirstLine"
+	],
+	"main": "./dist/extension.js",
+	"contributes": {
+		"commands": [
+			{
+				"command": "extension.triggerInlineCompletion",
+				"title": "alpaca-vscode: Trigger Inline Completion"
+			},
+			{
+				"command": "extension.triggerNoCacheCompletion",
+				"title": "alpaca-vscode: Trigger No Cache Completion"
+			},
+			{
+				"command": "extension.copyIntercept",
+				"title": "alpaca-vscode: Copy Intercept"
+			},
+			{
+				"command": "extension.cutIntercept",
+				"title": "alpaca-vscode: Cut Intercept"
+			},
+			{
+				"command": "extension.acceptFirstLine",
+				"title": "alpaca-vscode: Accept First Line"
+			},
+			{
+				"command": "extension.acceptFirstWord",
+				"title": "alpaca-vscode: Accept First Word"
+			},
+			{
+				"command": "extension.copyChunks",
+				"title": "alpaca-vscode: Copy Chunks"
+			},
+			{
+				"command": "extension.generateGitCommitMessage",
+				"title": "alpaca-vscode: Generate Commit Message",
+				"icon": "$(sparkle)"
+			}
+		],
+		"keybindings": [
+			{
+				"command": "editor.action.inlineSuggest.commit",
+				"key": "tab",
+				"when": "inlineSuggestionVisible"
+			},
+			{
+				"command": "extension.triggerNoCacheCompletion",
+				"key": "alt+space",
+				"when": "editorTextFocus"
+			},
+			{
+				"command": "extension.copyIntercept",
+				"key": "ctrl+c",
+				"when": "editorTextFocus"
+			},
+			{
+				"command": "extension.cutIntercept",
+				"key": "ctrl+x",
+				"when": "editorTextFocus"
+			}
+		],
+		"configuration": {
+			"type": "object",
+			"title": "alpaca.vscode Configuration",
+			"properties": {
+				"alpaca-vscode.completion_endpoint": {
+					"type": "string",
+					"default": "",
+					"description": "alpaca.cpp server URL for FIM code completion."
+				},
+				"alpaca-vscode.completion_api_key": {
+					"type": "string",
+					"default": "",
+					"description": "API key for the completion endpoint."
+				},
+				"alpaca-vscode.commit_endpoint": {
+					"type": "string",
+					"default": "",
+					"description": "Chat endpoint URL for git commit message generation."
+				},
+				"alpaca-vscode.commit_model": {
+					"type": "string",
+					"default": "",
+					"description": "Model name for the commit message endpoint (e.g. google/gemini-2.5-flash)."
+				},
+				"alpaca-vscode.commit_api_key": {
+					"type": "string",
+					"default": "",
+					"description": "API key for the commit endpoint."
+				},
+				"alpaca-vscode.commit_api_version": {
+					"type": "string",
+					"default": "v1",
+					"description": "API version path appended to commit_endpoint."
+				},
+				"alpaca-vscode.self_signed_certificate": {
+					"type": "string",
+					"default": "",
+					"description": "Path to a self-signed CA certificate file."
+				},
+				"alpaca-vscode.enabled": {
+					"type": "boolean",
+					"default": true,
+					"description": "Globally enable/disable code completion."
+				},
+				"alpaca-vscode.language_settings": {
+					"type": "object",
+					"default": {},
+					"description": "Per-language completion toggles. Key = languageId, value = true/false."
+				},
+				"alpaca-vscode.show_info": {
+					"type": "boolean",
+					"default": true,
+					"description": "Show completion performance stats in the status bar."
+				},
+				"alpaca-vscode.auto": {
+					"type": "boolean",
+					"default": true,
+					"description": "Trigger completions automatically as you type (false = only via Alt+Space)."
+				},
+				"alpaca-vscode.debounce_ms": {
+					"type": "number",
+					"default": 0,
+					"description": "Debounce delay (ms) before triggering automatic completion."
+				},
+				"alpaca-vscode.n_prefix": {
+					"type": "number",
+					"default": 256,
+					"description": "Lines of text before the cursor to include as prefix context."
+				},
+				"alpaca-vscode.n_suffix": {
+					"type": "number",
+					"default": 64,
+					"description": "Lines of text after the cursor to include as suffix context."
+				},
+				"alpaca-vscode.n_predict": {
+					"type": "number",
+					"default": 128,
+					"description": "Max tokens to generate per completion."
+				},
+				"alpaca-vscode.t_max_prompt_ms": {
+					"type": "number",
+					"default": 500,
+					"description": "Max time (ms) allowed for prompt processing."
+				},
+				"alpaca-vscode.t_max_predict_ms": {
+					"type": "number",
+					"default": 2500,
+					"description": "Max time (ms) allowed for token generation."
+				},
+				"alpaca-vscode.max_line_suffix": {
+					"type": "number",
+					"default": 8,
+					"description": "Skip auto completion when cursor is more than N chars before end of line."
+				},
+				"alpaca-vscode.max_cache_keys": {
+					"type": "number",
+					"default": 250,
+					"description": "Max entries in the FIM result cache."
+				},
+				"alpaca-vscode.max_parallel_completions": {
+					"type": "number",
+					"default": 1,
+					"description": "Parallel completions per request."
+				},
+				"alpaca-vscode.ring_n_chunks": {
+					"type": "number",
+					"default": 16,
+					"description": "Max chunks in the context ring buffer."
+				},
+				"alpaca-vscode.ring_chunk_size": {
+					"type": "number",
+					"default": 64,
+					"description": "Lines per ring buffer chunk."
+				},
+				"alpaca-vscode.ring_scope": {
+					"type": "number",
+					"default": 1024,
+					"description": "Lines around the cursor to consider for ring buffer chunks."
+				},
+				"alpaca-vscode.ring_update_ms": {
+					"type": "number",
+					"default": 1000,
+					"description": "How often (ms) to process queued ring buffer chunks."
+				}
+			}
+		},
+		"menus": {
+			"scm/title": [
+				{
+					"command": "extension.generateGitCommitMessage",
+					"when": "scmProvider == git",
+					"group": "navigation"
+				}
+			]
+		}
+	},
+	"scripts": {
+		"watch": "tsc -watch -p ./",
+		"compile": "tsc -p ./",
+		"bundle": "esbuild src/extension.ts --bundle --platform=node --format=cjs --external:vscode --outfile=dist/extension.js --minify",
+		"packge": "vsce package",
+		"lint": "eslint --ext .ts,.tsx .",
+		"format": "prettier --write --ignore-path .gitignore '**/*'"
+	},
+	"dependencies": {
+		"axios": "^1.1.2"
+	},
+	"devDependencies": {
+		"@types/node": "^18.19.130",
+		"@types/vscode": "^1.109.0",
+		"@typescript-eslint/eslint-plugin": "^8.59.1",
+		"@typescript-eslint/parser": "^8.59.1",
+		"@vscode/vsce": "^3.9.1",
+		"esbuild": "^0.27.0",
+		"typescript": "^4.8.0"
+	},
+	"extensionDependencies": [
+		"vscode.git"
+	]
+}
